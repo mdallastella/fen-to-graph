@@ -1,7 +1,18 @@
 (ns fen-to-graph.core
+  (:require [clojure.tools.cli :refer [parse-opts]]
+            [clojure.string :as str])
   (:gen-class))
 
+(def cli-options
+  [["-f" "--fen" :required true :parse-fn #(str/trim %)]
+   ["-h" "--help"]])
+
+(defn process [fen]
+  (println fen))
+
 (defn -main
-  "I don't do a whole lot ... yet."
   [& args]
-  (println "Hello, World!"))
+  (let [{:keys [options args errors summary]} (parse-opts args cli-options)]
+    (cond
+      (or (:help options) (not (contains? options :fen))) (println summary)
+      (:fen options) (process (:fen options)))))
