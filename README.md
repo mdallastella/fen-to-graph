@@ -8,7 +8,7 @@ Here's is an example of my idea. In the initial chessboard position, the white
 knight on B1 and the pawn on D2 have the following relationships with the
 squares:
 
-![](https://github.com/mdallastella/fen-to-graph/example-graph.png)
+![](https://raw.githubusercontent.com/mdallastella/fen-to-graph/master/example-graph.png)
 
 It's just a toy I'm doing for better understand Clojure and graphs.
 
