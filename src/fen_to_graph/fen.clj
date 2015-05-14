@@ -25,7 +25,7 @@
      :fullmove fullmove}))
 
 (defn- number->underscore [row n]
-  (into [] (concat row (repeat (Integer/parseInt n) \_))))
+  (into [] (concat row (repeat (Integer/parseInt (str n)) \_))))
 
 (defn- expand-row-empty-squares [row]
   (loop [pieces (seq row)
@@ -38,4 +38,4 @@
           (recur (rest pieces) (conj new-row piece)))))))
 
 (defn pieces-to-board [pieces]
-  (map #(expand-row-empty-squares %) pieces))
+  (map expand-row-empty-squares pieces))
