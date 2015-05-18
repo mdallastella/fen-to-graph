@@ -1,6 +1,8 @@
 (ns fen-to-graph.core
   (:require [clojure.tools.cli :refer [parse-opts]]
-            [clojure.string :as str])
+            [clojure.string :as str]
+            [clojure.pprint :as pp]
+            [fen-to-graph.fen :refer [fen-to-list]])
   (:gen-class))
 
 (def cli-options
@@ -8,7 +10,7 @@
    ["-h" "--help"]])
 
 (defn process [fen]
-  (println fen))
+  (pp/pprint (fen-to-list fen)))
 
 (defn -main
   [& args]
