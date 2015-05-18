@@ -43,8 +43,28 @@
 (defn pieces-to-board [pieces]
   (map expand-row-empty-squares pieces))
 
-(defn fen-to-board [fen]
+(defn fen-to-list [fen]
   (-> fen
       split-fen-string
       :pieces
-      pieces-to-board))
+      pieces-to-board
+      flatten))
+
+(def column-list
+  '("a" "b" "c" "d" "e" "f" "g" "h"))
+
+(def coord-list
+  (loop [rows 8
+         row-id 8
+         column-name column-list
+         result []]
+    (if (= 0 rows)
+      result
+      (recur (if (= (first column-name) "h") (dec rows) rows)
+             (if (= (first column-name) "h") (dec row-id) row-id)
+             (if (= (first column-name) "h") column-list (rest column-name))
+             (conj result (keyword (str (first column-name) row-id)))))))
+
+
+(defn list-to-pieces [list]
+  (map #(char->piece %1 %2) list coord-list))
