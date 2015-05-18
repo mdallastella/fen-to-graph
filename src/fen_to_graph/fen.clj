@@ -1,18 +1,21 @@
 (ns fen-to-graph.fen
-  (:require [clojure.string :as str]))
-
-(defn char->piece [char]
-  (case (str/upper-case char)
-    "R" :rook
-    "N" :knight
-    "B" :bishop
-    "Q" :queen
-    "K" :king
-    "P" :pawn
-    "_" :empty))
+  (:require [clojure.string :as str]
+            [fen-to-graph.moves :as moves]))
 
 (defn char->color [char]
   (if (Character/isUpperCase char) :white :black))
+
+(defn char->piece [char position]
+  (let [color (char->color char)
+        upper-char (Character/toUpperCase char)]
+    (case upper-char
+      \P (moves/->Pawn color position)
+      \N (moves/->Knight color position)
+      \B (moves/->Bishop color position)
+      \R (moves/->Rook color position)
+      \Q (moves/->Queen color position)
+      \K (moves/->King color position)
+      \_ nil)))
 
 (defn split-fen-string [fen]
   (let [[pieces move-to castling passant halfmove fullmove]
@@ -39,3 +42,9 @@
 
 (defn pieces-to-board [pieces]
   (map expand-row-empty-squares pieces))
+
+(defn fen-to-board [fen]
+  (-> fen
+      split-fen-string
+      :pieces
+      pieces-to-board))
