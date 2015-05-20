@@ -1,6 +1,7 @@
 (ns fen-to-graph.fen
   (:require [clojure.string :as str]
-            [fen-to-graph.moves :as moves]))
+            [fen-to-graph.pieces :as pieces]
+            [fen-to-graph.board :as board]))
 
 (defn char->color [char]
   (if (Character/isUpperCase char) :white :black))
@@ -9,12 +10,12 @@
   (let [color (char->color char)
         upper-char (Character/toUpperCase char)]
     (case upper-char
-      \P (moves/->Pawn color position)
-      \N (moves/->Knight color position)
-      \B (moves/->Bishop color position)
-      \R (moves/->Rook color position)
-      \Q (moves/->Queen color position)
-      \K (moves/->King color position)
+      \P (pieces/->Pawn color position)
+      \N (pieces/->Knight color position)
+      \B (pieces/->Bishop color position)
+      \R (pieces/->Rook color position)
+      \Q (pieces/->Queen color position)
+      \K (pieces/->King color position)
       \_ nil)))
 
 (defn split-fen-string [fen]
@@ -43,21 +44,8 @@
 (defn pieces-to-board [pieces]
   (map expand-row-empty-squares pieces))
 
-(def column-list
-  '("a" "b" "c" "d" "e" "f" "g" "h"))
-
-(def coord-list
-  (loop [rows 8
-         result []]
-    (if (= 0 rows)
-      result
-      (recur (dec rows)
-             (concat result (map #(keyword (str %1 %2))
-                                 (cycle column-list)
-                                 (repeat 8 rows)))))))
-
 (defn list-to-pieces [list]
-  (map #(char->piece %1 %2) list coord-list))
+  (map #(char->piece %1 %2) list board/coord-list))
 
 (defn fen-to-list [fen]
   (-> fen

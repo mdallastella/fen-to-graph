@@ -2,7 +2,8 @@
   (:require [clojure.tools.cli :refer [parse-opts]]
             [clojure.string :as str]
             [clojure.pprint :as pp]
-            [fen-to-graph.fen :refer [fen-to-list]])
+            [fen-to-graph.fen :refer [fen-to-list]]
+            [fen-to-graph.moves :as moves])
   (:gen-class))
 
 (def cli-options
@@ -10,7 +11,9 @@
    ["-h" "--help"]])
 
 (defn process [fen]
-  (pp/pprint (fen-to-list fen)))
+  (dorun
+   (map #(println (moves/legal-moves %))
+        (remove nil? (fen-to-list fen)))))
 
 (defn -main
   [& args]
