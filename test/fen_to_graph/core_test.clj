@@ -1,7 +1,5 @@
 (ns fen-to-graph.core-test
-  (:require [clojure.test :refer :all]
+  (:require [midje.sweet :refer :all]
             [fen-to-graph.core :refer :all]))
 
-(deftest a-test
-  (testing "FIXME, I fail."
-    (is (= 0 1))))
+(fact (+ 1 1) => 2)

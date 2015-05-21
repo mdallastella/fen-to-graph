@@ -50,4 +50,4 @@
   (nth board (coord->index coord)))
 
 (defn occupied? [board coord]
-  (not (nil? (occupied-by board coord))))
+  (not= \_ (occupied-by board coord)))

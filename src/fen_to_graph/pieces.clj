@@ -122,5 +122,5 @@
 (defrecord King [color position]
   Piece
   (legal-moves [this board]
-    (let [functions [up right down left]]
+    (let [functions [up up-right right down-right down down-left left up-left]]
       (filter board/valid-coord? (map #(apply % [position]) functions)))))

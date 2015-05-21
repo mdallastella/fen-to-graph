@@ -3,7 +3,7 @@
             [clojure.string :as str]
             [clojure.pprint :as pp]
             [fen-to-graph.fen :refer [fen-to-list]]
-            [fen-to-graph.moves :as moves])
+            [fen-to-graph.pieces :as pieces])
   (:gen-class))
 
 (def cli-options
@@ -11,9 +11,10 @@
    ["-h" "--help"]])
 
 (defn process [fen]
-  (dorun
-   (map #(println (moves/legal-moves %))
-        (remove nil? (fen-to-list fen)))))
+  (let [board (fen-to-list fen)]
+    (dorun
+     (map #(println (pieces/legal-moves % board))
+          (remove nil? board)))))
 
 (defn -main
   [& args]
