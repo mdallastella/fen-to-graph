@@ -10,11 +10,19 @@
   [["-f" "--fen" :required true :parse-fn #(str/trim %)]
    ["-h" "--help"]])
 
+(defn- piece-to-map [piece board]
+  {:name (:name piece)
+   :color (:color piece)
+   :occupy (:position piece)
+   :defend (pieces/legal-moves piece board)})
+
+(defn- create-graph [pieces-map]
+  (pp/pprint pieces-map))
+
 (defn process [fen]
-  (let [board (fen-to-list fen)]
-    (dorun
-     (map #(println (pieces/legal-moves % board))
-          (remove nil? board)))))
+  (let [board (fen-to-list fen)
+        pieces-map (map #(piece-to-map % board) (remove nil? board))]
+    (create-graph pieces-map)))
 
 (defn -main
   [& args]

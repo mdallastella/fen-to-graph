@@ -10,12 +10,12 @@
   (let [color (char->color char)
         upper-char (Character/toUpperCase char)]
     (case upper-char
-      \P (pieces/->Pawn color position)
-      \N (pieces/->Knight color position)
-      \B (pieces/->Bishop color position)
-      \R (pieces/->Rook color position)
-      \Q (pieces/->Queen color position)
-      \K (pieces/->King color position)
+      \P (pieces/->Pawn "pawn" color position)
+      \N (pieces/->Knight "knight" color position)
+      \B (pieces/->Bishop "bishop" color position)
+      \R (pieces/->Rook "rook" color position)
+      \Q (pieces/->Queen "queen" color position)
+      \K (pieces/->King "king" color position)
       \_ nil)))
 
 (defn split-fen-string [fen]

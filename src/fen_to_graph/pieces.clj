@@ -85,13 +85,13 @@
   "Protocol for all pieces"
   (legal-moves [this board]))
 
-(defrecord Pawn [color position]
+(defrecord Pawn [name color position]
   Piece
   (legal-moves [this board]
     (let [functions (pawn-moves color position)]
       (filter board/valid-coord? (map #(apply % [position]) functions)))))
 
-(defrecord Knight [color position]
+(defrecord Knight [name color position]
   Piece
   (legal-moves [this board]
     (let [functions [(comp up-left left)
@@ -104,22 +104,22 @@
                      (comp down-left left)]]
       (filter board/valid-coord? (map #(apply % [position]) functions)))))
 
-(defrecord Bishop [color position]
+(defrecord Bishop [name color position]
   Piece
   (legal-moves [this board]
     (bishop-moves position board)))
 
-(defrecord Rook [color position]
+(defrecord Rook [name color position]
   Piece
   (legal-moves [this board]
     (rook-moves position board)))
 
-(defrecord Queen [color position]
+(defrecord Queen [name color position]
   Piece
   (legal-moves [this board]
     (queen-moves position board)))
 
-(defrecord King [color position]
+(defrecord King [name color position]
   Piece
   (legal-moves [this board]
     (let [functions [up up-right right down-right down down-left left up-left]]
