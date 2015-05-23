@@ -2,7 +2,7 @@
   (:require [clojure.tools.cli :refer [parse-opts]]
             [clojure.string :as str]
             [clojure.pprint :as pp]
-            [fen-to-graph.fen :refer [fen-to-list]]
+            [fen-to-graph.fen :refer [fen-to-board]]
             [fen-to-graph.pieces :as pieces])
   (:gen-class))
 
@@ -20,7 +20,7 @@
   (pp/pprint pieces-map))
 
 (defn process [fen]
-  (let [board (fen-to-list fen)
+  (let [board (fen-to-board fen)
         pieces-map (map #(piece-to-map % board) (remove nil? board))]
     (create-graph pieces-map)))
 

@@ -4,6 +4,7 @@
             [fen-to-graph.board :as board]))
 
 (defn char->color [char]
+  "Return the color of a piece based on its case."
   (if (Character/isUpperCase char) :white :black))
 
 (defn char->piece [char position]
@@ -18,20 +19,13 @@
       \K (pieces/->King "king" color position)
       \_ nil)))
 
-(defn split-fen-string [fen]
-  (let [[pieces move-to castling passant halfmove fullmove]
-        (str/split fen #" " 6)]
-    {:pieces (str/split pieces #"/")
-     :move-to move-to
-     :castling castling
-     :passant passant
-     :halfmove halfmove
-     :fullmove fullmove}))
-
 (defn- number->underscore [row n]
-  (into [] (concat row (repeat (Integer/parseInt (str n)) \_))))
+  "Insert into row a n number of underscores."
+  (vec (concat row (repeat (Integer/parseInt (str n)) \_))))
 
 (defn- expand-row-empty-squares [row]
+  "Takes a fen row definition and expands the empty squares indicated
+  by a number. Es. p4p -> (p _ _ _ _ p)"
   (loop [pieces (seq row)
          new-row []]
     (if (empty? pieces)
@@ -41,16 +35,25 @@
           (recur (rest pieces) (number->underscore new-row piece))
           (recur (rest pieces) (conj new-row piece)))))))
 
-(defn pieces-to-board [pieces]
-  (map expand-row-empty-squares pieces))
+(defn split-fen-string [fen]
+  "Split the FEN string into a map, transforming the pieces field in a
+  8x8 vector."
+  (let [[pieces move-to castling passant halfmove fullmove]
+        (str/split fen #" " 6)]
+    {:pieces (apply concat (map
+                            expand-row-empty-squares
+                            (str/split pieces #"/")))
+     :move-to move-to
+     :castling castling
+     :passant passant
+     :halfmove halfmove
+     :fullmove fullmove}))
 
-(defn list-to-pieces [list]
-  (map #(char->piece %1 %2) list board/coord-list))
+(defn transform-into-pieces [list]
+  (map char->piece list board/coord-list))
 
-(defn fen-to-list [fen]
+(defn fen-to-board [fen]
   (-> fen
       split-fen-string
       :pieces
-      pieces-to-board
-      flatten
-      list-to-pieces))
+      transform-into-pieces))
