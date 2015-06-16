@@ -41,10 +41,8 @@
 
 (defn- pawn-initial? [color position]
   "Check if a pawn is in its initial position."
-  (cond
-    (and (= color :white) (= (second (name position)) \2)) true
-    (and (= color :black) (= (second (name position)) \7)) true
-    :else false))
+  (let [initial-position {:white \2 :black \7}]
+    (= (second (name position)) (initial-position color))))
 
 (defn- pawn-moves [color position]
   "Returns a list of functions that calculate the possible moves of a
