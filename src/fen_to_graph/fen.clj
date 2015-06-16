@@ -3,8 +3,9 @@
             [fen-to-graph.pieces :as pieces]
             [fen-to-graph.board :as board]))
 
-(defn char->color [char]
+(defn char->color
   "Return the color of a piece based on its case."
+  [char]
   (if (Character/isUpperCase char) :white :black))
 
 (defn char->piece [char position]
@@ -19,13 +20,20 @@
       \K (pieces/->King "king" color position)
       \_ nil)))
 
-(defn- number->underscore [row n]
-  "Insert into row a n number of underscores."
-  (vec (concat row (repeat (Integer/parseInt (str n)) \_))))
+(defn- char->int
+  "Transforms a Character into an Integer"
+  [char]
+  (Integer/parseInt (str char)))
 
-(defn- expand-row-empty-squares [row]
+(defn- number->underscore
+  "Insert into row a n number of underscores."
+  [row n]
+  (vec (concat row (repeat (char->int n) \_))))
+
+(defn- expand-row-empty-squares
   "Takes a fen row definition and expands the empty squares indicated
   by a number. Es. p4p -> (p _ _ _ _ p)"
+  [row]
   (loop [pieces (seq row)
          new-row []]
     (if (empty? pieces)
@@ -35,9 +43,10 @@
           (recur (rest pieces) (number->underscore new-row piece))
           (recur (rest pieces) (conj new-row piece)))))))
 
-(defn split-fen-string [fen]
+(defn split-fen-string
   "Split the FEN string into a map, transforming the pieces field in a
   8x8 vector."
+  [fen]
   (let [[pieces move-to castling passant halfmove fullmove]
         (str/split fen #" " 6)]
     {:pieces (apply concat (map
@@ -49,10 +58,14 @@
      :halfmove halfmove
      :fullmove fullmove}))
 
-(defn transform-into-pieces [list]
+(defn transform-into-pieces
+  "Takes a list of characters and transforms it in a list of pieces"
+  [list]
   (map char->piece list board/coord-list))
 
-(defn fen-to-board [fen]
+(defn fen-to-board
+  "The main function that transforms a fen string into a list of Piece objects"
+  [fen]
   (-> fen
       split-fen-string
       :pieces
