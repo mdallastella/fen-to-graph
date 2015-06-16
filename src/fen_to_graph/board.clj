@@ -17,18 +17,12 @@
 (defn- index [file rank]
   (+ (file-component file) (rank-component rank)))
 
-(def column-list
-  '("a" "b" "c" "d" "e" "f" "g" "h"))
-
 (def coord-list
-  (loop [rows 8
-         result []]
-    (if (= 0 rows)
-      result
-      (recur (dec rows)
-             (into result (map #(keyword (str %1 %2))
-                               (cycle column-list)
-                               (repeat 8 rows)))))))
+  (let [take-repeatedly #(take 8 (repeat %))
+        c (take-repeatedly [\a \b \c \d \e \f \g \h])
+        n (map take-repeatedly (range 8 0 -1))]
+    (map #(keyword (str %1 %2))
+         (flatten c) (flatten n))))
 
 (defn valid-coord? [coord]
   (let [[file rank] (rest (str coord))
