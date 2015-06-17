@@ -1,6 +1,8 @@
 (ns fen-to-graph.pieces
   (:require [fen-to-graph.board :as board]))
 
+;; TODO: Some refactoring, try to make functions easier to read.
+
 (defn- position-to-int
   "Takes a position, split it in characters and return a list of
   int of it. Es. :e2 -> (101 50)."
